@@ -815,7 +815,9 @@ The path to look for man pages is:\n\
   -v         Causes `man' to print messages about non-fatal errors it\n\
              encounters during the run.\n\
 \n\
-  -d         Causes `man' to display debugging trace of its run.\n\n",
+  -d         Causes `man' to display debugging trace of its run.\n\
+\n\
+  -h         Print this help message and exits.\n\n",
 	  PATH_SEP, pager, manpath, PATH_SEP);
   return 1;
 }
@@ -885,6 +887,9 @@ main (int argc, char *argv[])
 		  case 'v':
 		    verbose_option = 1;
 		    break;
+          case 'h':
+            return usage();
+            break;
 		  case 'd':
 		    debugging_output = 1;
 		    fprintf (stderr, "man version %s: debugging output ON\n",
