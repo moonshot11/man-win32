@@ -1,0 +1,130 @@
+.\" man version 1.3 man page
+.TH MAN 1 "v1.3, February 2000" "DJGPP Project"
+.SH NAME
+man \- find and display documentation from manual pages
+.SH SYNOPSIS
+.B man
+[\fI\-\fR] [\fB\-al\fR] [\fB\-M\fR \fIDIRLIST\fR]
+[[\fB\-s\fR] \fISECTION\fR] \fITOPIC\fR...
+.SH DESCRIPTION
+.PP
+\fBMan\fR looks for manual pages which describe each one of the named
+\fITOPIC\fR(s) in directories specified by \fBMANPATH\fR environment
+variable, and displays those pages.  If the standard output is not a
+terminal, or if the \fI-\fR option is given, \fBman\fR writes the
+manual page(s) to standard output; otherwise, it pipes the page(s)
+through a program defined by the \fBPAGER\fR environment variable, to
+allow browsing and bold/underlined words to be displayed on the
+screen.
+.PP
+\fBMANPATH\fR is a list of directories separated by a system-dependent
+separator: colon `\fB:\fR' on Unix systems, semi-colon `\fB;\fR' on
+MS-DOS/MS-Windows systems.  Each directory in this list is assumed to
+contain either manual pages (files) or subdirectories named
+\fBman\fIN\fR or \fBcat\fIN\fR (where \fIN\fR is a section name) which
+contains manual pages.  \fBMan\fR does \fBnot\fR look more than one
+level deep into the subdirectories.  Any file of the form
+\fITOPIC\fB.ext\fR found in any of the directories will be displayed,
+no matter what is the extension \fB.ext\fR; this allows to browse docs
+with file names like \fBfoo.txt\fR or \fBbar.doc\fR.  However, files
+found in the standard \fBman\fIN\fR and \fBcat\fIN\fR subdirectories
+will only be displayed if they have the standard extensions of Unix
+man pages, \fB[1-9][onlp]\fR.
+.PP
+If \fBMANPATH\fR is not defined, \fBman\fR looks in a system-dependent
+default list of directories; invoking \fBman\fR with no arguments will
+print that default list.
+.PP
+If \fBPAGER\fR is not defined, it defaults to '\fBless -c\fR'.
+.SH OPTIONS
+.TP
+.BI \-
+Write the output to standard output, even if it is a terminal.  By
+default, when standard output is a terminal, \fBman\fR pipes its
+output through a pager program.
+.TP
+.BI \-a
+Display all manual pages which match \fITOPIC\fR.  By default,
+\fBman\fR displays the first page it finds.
+.TP
+.BI \-l
+List all the manual pages which match \fITOPIC\fR, but don't display
+them.  Each page is listed together with the \fB\-M\fR argument which,
+if used, will cause \fBman\fR to display that page alone.
+.TP
+.BI \-M " DIRLIST"
+Specifies an alternate search path for manual pages.  \fIDIRLIST\fR is
+a list of directories separated by the same separator as in the value
+of \fBMANPATH\fR.  This option overrides the \fBMANPATH\fR environment
+variable.
+.TP
+.BI \-s " SECTION"
+Specifies the section of the manual for \fBman\fR to search.  \fBMan\fR
+will only display pages from that section.  \fISECTION\fR may be a
+digit perhaps followed by a letter, a letter from the set
+[\fBonlp\fR], or one of the words `\fBold\fR', `\fBnew\fR',
+`\fBlocal\fR' or `\fBpublic\fR'.
+.sp
+You cannot specify more than a single section at a time, but you can
+specify multiple
+.B \-s
+options, as in \fB"\-s 1 foo \-s 5 foo"\fR.
+.sp
+A section name in short form only (\fB1v\fR, \fBn\fR, etc.) can also
+be given without preceeding it with the
+.B \-s
+switch.
+.TP
+.BI \-v
+Causes \fBman\fR to print messages about non-fatal errors it
+encounters during the run.
+.TP
+.BI \-d
+Causes \fBman\fR to display debugging trace of its run.
+.SH "ENVIRONMENT VARIABLES"
+.TP
+.B MANPATH
+This variable specifies the list of directories to search for man
+pages.
+.TP
+.B PAGER
+This variable specifies the program called by \fBman\fR to display the
+man pages on user's screen.
+.TP
+.B DJDIR
+If this variable is defined and its value is an existing directory,
+the DJGPP version of \fBman\fR searches its \fBman\fR and \fBinfo\fR
+subdirectories of that directory, in addition to the directories
+specified by \fBMANPATH\fR.
+.SH DIAGNOSTICS
+.PP
+Normally, the exit status is 0 if \fBman\fR finds at least one man
+page.  The exit status is 2 if no man pages were found.  If no
+\fITOPIC\fR arguments were given, \fBman\fR prints an error message
+and returns with exit status of 1.  Invoking \fBman\fR with no
+arguments at all causes it to print usage info and exit with status of
+1.
+.SH BUGS
+.PP
+Email bug reports to
+.BR djgpp@delorie.com .
+.PP
+Relies on \fBGroff\fR or a very close work-alike to display unformatted
+pages.
+.PP
+Doesn't support preprocessing with \fBvgrind\fR (since \fBGroff\fR
+doesn't).
+.PP
+Supports only a subset of options provided by standard Unix \fBman\fR
+commands.  In particular, \fBwhatis\fR data-base and related options
+(\fB\-f\fR, \fB\-k\fR) aren't supported.
+.PP
+Multiple sections (\fB\-s 2,3,8\fR) aren't supported.  Use multiple
+\fB\-s\fR requests to work around.
+.PP
+\fB"man foo"\fR will happily try to display \fBfoo.tgz\fR if it finds
+it, since it doesn't care too much about the file-name extension.
+.PP
+\fBMan\fR is relatively slow on large directories.
+.\" Work around problems with some troff -man implementations.
+.br

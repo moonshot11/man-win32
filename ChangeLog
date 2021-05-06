@@ -1,0 +1,42 @@
+2005-11-05  Eli Zaretskii  <eliz@gnu.org>
+
+	* Makefile (CPPFLAGS): Define to use "-I.".
+	(CFLAGS): Add -ggdb.
+	(man): Add fnmatch.o, and use explicit command.
+
+	* man.c [__WIN32__]: Include windows.h and malloc.h.
+	(pager, groff, manpath) [__WIN32__]: Definitions for Windows.
+	(display_page): Don't quote program names, quoted names get in the
+	way on Windows.
+	(list_page): Add __WIN32__ condition to code that handles absolute
+	file names with drive letters.
+	(isadir): New function, to hide the fact that Windows doesn't have
+	D_OK.
+	(try_directory): Use `isadir' instead of `access' with D_OK.
+
+2000-02-19  Eli Zaretskii  <eliz@is.elta.co.il>
+
+	Version 1.3:
+
+	* man.nro: New file.
+
+	* NEWS: New file.
+
+	* man.c: Borland C port from Erwin Waterlander, waterlan@xs4all.nl
+	or erwin.waterlander@philips.com.
+	(add_page): Fix a bug in memory allocation for the pages[] array.
+	(display_page): Leave spaces around "or" between the two program
+	names.
+	(set_flags): Don't leak file handles if fgets fails to read, close
+	the file unconditionally.  Fix the diagnostic message.
+	(try_directory) [__TURBOC__]: Compare `man' and `cat' directory
+	names and file names returned by `readdir' case-insensitively.
+	`struct dirent' lacks the d_namlen member, fix with `strlen'.
+	(man_entry): Free `curdir' after usage.
+	(main): Free pages[] before exiting.
+
+	* contrib/*: New files, for portability to Borland C.
+
+1997-12-29  Eli Zaretskii  <eliz@is.elta.co.il>
+
+	Version 1.2 released.

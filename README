@@ -1,0 +1,101 @@
+This is a simple `man' clone.  It can be used to display Unix man
+pages, both formatted and unformatted.  It can also be used to display
+pure-text docs, provided that the directory where these files are kept
+is mentioned in the MANPATH environment variable; this makes it
+especially suited to the PC environment where typically each program
+or package come with some kind of text-only documentation.
+
+Requirements:
+------------
+
+  1.  The DOS port requires DPMI services.  If you don't run it from
+      Windows DOS box, get the free DPMI host available in
+      v2misc/csdpmiNb.zip (N is a version number) from the DJGPP
+      archives.
+
+  2.  A pager to browse the displayed docs.  The default is to use GNU
+      Less, unless the PAGER environment variable says otherwise.  GNU
+      Less is available in v2gnu/lssNNNb.zip (NNN is the version
+      number) from the DJGPP archives, and from GnuWin32.
+
+  3.  Displaying unformatted Unix man pages requires Groff or its very
+      close work-alike.  A DJGPP port of Groff is available in
+      v2gnu/groNNNb.zip (NNN is the version number) from the DJGPP
+      archives.  The Windows port is available from GnuWin32.
+
+  4.  When standard output is the terminal screen and the `-' option
+      is given (meaning do NOT pipe the page through a pager), `man'
+      will call `cat' to dump the file to the screen.  If you need to
+      use this option, get the port of GNU Textutils in
+      v2gnu/txtNNNb.zip or on GnuWin32, which includes `cat'.
+
+
+Installation:
+------------
+
+  1.  Unzip the package and put man.exe somewhere along your PATH.
+
+  2.  (This is important only for DJGPP.)  The file DJGPP.ENV supplied
+      with DJGPP v2.03 and later includes the following two lines in
+      the [man] section:
+
+      [man]
+      MANPATH=%/>;MANPATH%%DJDIR%/man;%DJDIR%/info
+      +PAGER=%DJDIR%/bin/less.exe
+
+      Alternatively, you could just set these variables in your
+      environment (but use explicit path names instead of the syntax
+      specific to DJGPP.ENV).
+
+      The above setting allows you to set MANPATH in the environment
+      to any site-specific directories where you put your
+      documentation files.
+
+  3.  Any or all of the directories mentioned in MANPATH can be
+      structured by the manual sections, as they are on a Unix
+      system.  Such structured directories have subdirectories named
+      `manN' and `catN' where N is a single character from the set
+      [1-9lnop].  `man' assumes that a subdirectory whose name begins
+      with "man" holds unformatted pages and the respective "cat"
+      directory, if present, holds formatted pages.  A file from a
+      `manN' subdirectory will only be displayed if no file by the
+      same name can be found in the sibling `catN' subdirectory.
+
+      Note that `man' will NOT recurse into any subdirectory that
+      doesn't begin with "cat" or "man".  When given an explicit
+      section, it will only recurse into subdirectories pertaining to
+      that section.  For example "man -s 3 foo" will only recurse into
+      `cat3' and `man3' subdirectories of every directory in MANPATH.
+      (The directories explicitly mentioned in MANPATH are always
+      examined.)
+
+
+Rebuilding from sources:
+-----------------------
+
+  1.  In general, after unzipping the sources, just go to the
+      directory where the sources are and say `make'.  When Make
+      finishes, you can copy man.exe to any directory of your liking.
+      The docs is supplied as an Nroff source man.man; the formatted
+      page is in man.1.
+
+  2.  I didn't try to build this program with anything but DJGPP and
+      MinGW, but it should compile on Unix as well.  Thanks to Erwin
+      Waterlander <waterlan@xs4all.nl>, Borland C compatibility is
+      included in this release (some auxiliary files, required to
+      actually build the program with the Borland compiler, can be
+      found in the `contrib' subdirectory; you need to copy them to
+      their parent directory before building).
+
+      Other DOS and Windows compilers should be able to build it, but
+      you might need to change some include files (e.g., <unistd.h> is
+      absent from many DOS compilers).
+
+  3.  This version uses `fnmatch' library function, so you might need
+      to introduce changes if your library doesn't have it.  You can
+      find a GNU version of `fnmatch' in several GNU packages,
+      e.g. GNU Make.
+
+      Another potential portability problem is with `opendir' and
+      `readdir' functions.  Some DOS and Windows compilers might lack
+      them.

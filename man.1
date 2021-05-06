@@ -1,0 +1,198 @@
+
+
+
+MAN(1)                                                     MAN(1)
+
+
+NNAAMMEE
+       man - find and display documentation from manual pages
+
+SSYYNNOOPPSSIISS
+       mmaann [_-] [--aall] [--MM _D_I_R_L_I_S_T] [[--ss] _S_E_C_T_I_O_N] _T_O_P_I_C...
+
+DDEESSCCRRIIPPTTIIOONN
+       MMaann  looks for manual pages which describe each one of the
+       named _T_O_P_I_C(s) in directories specified by  MMAANNPPAATTHH  envi-
+       ronment  variable, and displays those pages.  If the stan-
+       dard output is not a terminal,  or  if  the  _-  option  is
+       given,  mmaann  writes the manual page(s) to standard output;
+       otherwise, it pipes the page(s) through a program  defined
+       by  the  PPAAGGEERR environment variable, to allow browsing and
+       bold/underlined words to be displayed on the screen.
+
+       MMAANNPPAATTHH is a list of directories separated  by  a  system-
+       dependent separator: colon `::' on Unix systems, semi-colon
+       `;;' on MS-DOS/MS-Windows systems.  Each directory in  this
+       list  is assumed to contain either manual pages (files) or
+       subdirectories named mmaann_N or ccaatt_N (where _N  is  a  section
+       name) which contains manual pages.  MMaann does nnoott look more
+       than one level deep into the subdirectories.  Any file  of
+       the form _T_O_P_I_C..eexxtt found in any of the directories will be
+       displayed, no matter what  is  the  extension  ..eexxtt;  this
+       allows  to  browse  docs  with  file names like ffoooo..ttxxtt or
+       bbaarr..ddoocc.  However, files found in the  standard  mmaann_N  and
+       ccaatt_N  subdirectories  will  only be displayed if they have
+       the standard extensions of Unix man pages, [[11--99]][[oonnllpp]].
+
+       If MMAANNPPAATTHH is not defined, mmaann looks in a system-dependent
+       default  list  of  directories; invoking mmaann with no argu-
+       ments will print that default list.
+
+       If PPAAGGEERR is not defined, it defaults to 'lleessss --cc'.
+
+OOPPTTIIOONNSS
+       --      Write the output to standard output, even if it  is
+              a  terminal.  By default, when standard output is a
+              terminal, mmaann pipes its output through a pager pro-
+              gram.
+
+       --aa     Display  all  manual  pages  which match _T_O_P_I_C.  By
+              default, mmaann displays the first page it finds.
+
+       --ll     List all the manual pages which  match  _T_O_P_I_C,  but
+              don't  display  them.  Each page is listed together
+              with the --MM argument which, if used, will cause mmaann
+              to display that page alone.
+
+       --MM _D_I_R_L_I_S_T
+              Specifies  an  alternate  search  path  for  manual
+              pages.  _D_I_R_L_I_S_T is a list of directories  separated
+              by  the  same separator as in the value of MMAANNPPAATTHH.
+
+
+
+DJGPP Project          v1.3, February 2000                      1
+
+
+
+
+
+MAN(1)                                                     MAN(1)
+
+
+              This option overrides the MMAANNPPAATTHH environment vari-
+              able.
+
+       --ss _S_E_C_T_I_O_N
+              Specifies  the  section  of  the  manual for mmaann to
+              search.  MMaann will only display pages from that sec-
+              tion.  _S_E_C_T_I_O_N may be a digit perhaps followed by a
+              letter, a letter from the set [oonnllpp], or one of the
+              words `oolldd', `nneeww', `llooccaall' or `ppuubblliicc'.
+
+              You  cannot specify more than a single section at a
+              time, but you can specify multiple --ss  options,  as
+              in ""--ss 11 ffoooo --ss 55 ffoooo"".
+
+              A section name in short form only (11vv, nn, etc.) can
+              also be given without preceeding  it  with  the  --ss
+              switch.
+
+       --vv     Causes mmaann to print messages about non-fatal errors
+              it encounters during the run.
+
+       --dd     Causes mmaann to display debugging trace of its run.
+
+EENNVVIIRROONNMMEENNTT VVAARRIIAABBLLEESS
+       MMAANNPPAATTHH
+              This variable specifies the list of directories  to
+              search for man pages.
+
+       PPAAGGEERR  This  variable  specifies the program called by mmaann
+              to display the man pages on user's screen.
+
+       DDJJDDIIRR  If this variable is defined and  its  value  is  an
+              existing   directory,  the  DJGPP  version  of  mmaann
+              searches its mmaann and iinnffoo  subdirectories  of  that
+              directory, in addition to the directories specified
+              by MMAANNPPAATTHH.
+
+DDIIAAGGNNOOSSTTIICCSS
+       Normally, the exit status is 0 if mmaann finds at  least  one
+       man  page.   The  exit  status  is  2 if no man pages were
+       found.  If no _T_O_P_I_C arguments were given,  mmaann  prints  an
+       error message and returns with exit status of 1.  Invoking
+       mmaann with no arguments at all causes it to print usage info
+       and exit with status of 1.
+
+BBUUGGSS
+       Email bug reports to ddjjggpppp@@ddeelloorriiee..ccoomm.
+
+       Relies  on  GGrrooffff  or  a  very close work-alike to display
+       unformatted pages.
+
+       Doesn't support preprocessing  with  vvggrriinndd  (since  GGrrooffff
+       doesn't).
+
+
+
+
+DJGPP Project          v1.3, February 2000                      2
+
+
+
+
+
+MAN(1)                                                     MAN(1)
+
+
+       Supports  only  a  subset  of options provided by standard
+       Unix mmaann commands.  In particular,  wwhhaattiiss  data-base  and
+       related options (--ff, --kk) aren't supported.
+
+       Multiple sections (--ss 22,,33,,88) aren't supported.  Use multi-
+       ple --ss requests to work around.
+
+       ""mmaann ffoooo"" will happily try to display ffoooo..ttggzz if it  finds
+       it,  since  it  doesn't  care too much about the file-name
+       extension.
+
+       MMaann is relatively slow on large directories.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DJGPP Project          v1.3, February 2000                      3
+
+
