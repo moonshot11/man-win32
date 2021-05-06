@@ -137,6 +137,9 @@ int show_all_option;
 /* If non-zero, just list all the matching pages, but don't display them.  */
 int list_all_option;
 
+/* If non-zero, list all the file paths of matching pages.  */
+int list_fpaths_option;
+
 /* If non-zero, print diagnostic messages.  */
 int verbose_option;
 
@@ -319,14 +322,25 @@ list_page (const Man_page *page)
   else
     topic[-1] = '\0';
 
-  if (section_name)
-    *section_name++ = '\0';	/* remove the dot and get past it */
-  printf ("%s", topic);
-  if (section_name)
-    printf (" (%s)\t", section_name);
-  else
-    printf ("     \t");
-  printf ("-M %s\n", page->path); /* say which -M argument will find it */
+    if (section_name)
+        *section_name++ = '\0';	/* remove the dot and get past it */
+
+    if (list_all_option)
+    {
+        printf ("%s", topic);
+        if (section_name)
+            printf (" (%s)\t", section_name);
+        else
+            printf ("     \t");
+        printf ("-M %s\n", page->path); /* say which -M argument will find it */
+    }
+    else if (list_fpaths_option)
+    {
+        char last = page->path[ strlen(page->path)-1 ];
+        char *sep = (last == '\\') ? "" : "\\";
+        printf("%s%sman%s\\%s.%s\n",
+                page->path, sep, section_name, page->name, section_name);
+    }
 }
 
 /* Searching for man pages along MANPATH.  */
@@ -668,7 +682,7 @@ man_entry (const char *section, const char *name)
 	     pages easier.  The list is sorted in descending order.  */
 	  Man_page *page = pages[next_slot - 1];
 
-	  if (list_all_option)
+	  if (list_all_option || list_fpaths_option)
 	    list_page (page);
 	  else
 	    {
@@ -771,6 +785,8 @@ The path to look for man pages is:\n\
              them.  Each page is listed together with the -M argument which,\n\
              if used, will cause `man' display that page alone.\n\
 \n\
+  -W         Print the full paths of each man page that is found, in order.\n\
+\n\
   -M path    Specifies an alternate search path for manual pages.  PATH is\n\
              a list of directories separated by `%c', just like the value\n\
              of MANPATH.  This option overrides the MANPATH environment\n\
@@ -850,6 +866,9 @@ main (int argc, char *argv[])
 		  case 'l':
 		    list_all_option = 1;
 		    break;
+          case 'W':
+            list_fpaths_option = 1;
+            break;
 		  case 'v':
 		    verbose_option = 1;
 		    break;
