@@ -140,6 +140,9 @@ int list_all_option;
 /* If non-zero, list all the file paths of matching pages.  */
 int list_fpaths_option;
 
+/* If non-zero, print the first path and exit.  */
+int list_onepath_option;
+
 /* If non-zero, print diagnostic messages.  */
 int verbose_option;
 
@@ -334,7 +337,7 @@ list_page (const Man_page *page)
             printf ("     \t");
         printf ("-M %s\n", page->path); /* say which -M argument will find it */
     }
-    else if (list_fpaths_option)
+    else if (list_fpaths_option || list_onepath_option)
     {
         char last = page->path[ strlen(page->path)-1 ];
         char *sep = (last == '\\') ? "" : "\\";
@@ -682,8 +685,12 @@ man_entry (const char *section, const char *name)
 	     pages easier.  The list is sorted in descending order.  */
 	  Man_page *page = pages[next_slot - 1];
 
-	  if (list_all_option || list_fpaths_option)
+	  if (list_all_option || list_fpaths_option || list_onepath_option)
+      {
 	    list_page (page);
+        if (list_onepath_option)
+            break;
+      }
 	  else
 	    {
 	      char *curdir = NULL, *formatter_cmd = NULL;
@@ -787,6 +794,9 @@ The path to look for man pages is:\n\
 \n\
   -W         Print the full paths of each man page that is found, in order.\n\
 \n\
+  -U         Print the full path of the first man page found.\n\
+             Option is a single U, as a counterpart to the double-U.\n\
+\n\
   -M path    Specifies an alternate search path for manual pages.  PATH is\n\
              a list of directories separated by `%c', just like the value\n\
              of MANPATH.  This option overrides the MANPATH environment\n\
@@ -868,6 +878,9 @@ main (int argc, char *argv[])
 		    break;
           case 'W':
             list_fpaths_option = 1;
+            break;
+          case 'U':
+            list_onepath_option = 1;
             break;
 		  case 'v':
 		    verbose_option = 1;
