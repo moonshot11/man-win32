@@ -2,9 +2,11 @@
 
 CC = gcc
 CPPFLAGS = -I.
-CFLAGS = -Wall -O2 -ggdb -g3
+CFLAGS = -O3 -s
 
-default: man
-
-man: man.c fnmatch.o
+man.exe: man.c fnmatch.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $^
+
+.PHONY: clean
+clean:
+	@rm -fv *.o *.exe
