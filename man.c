@@ -269,14 +269,6 @@ display_page (const char *file, const char *formatter)
       sprintf (cmd, "%s \"%s\"%s%s%s", formatter, file,
 	       direct_output ? "" : " | ",
 	       direct_output ? "" : pager, "");
-
-#ifdef MSDOS
-      /* A kludge to prevent the message below from showing when `man'
-	 is run by Info, or any other program that failed to close stderr.  */
-      if (isatty (fileno (stdout)))
-#endif
-      fprintf (stderr, "Reformatting page.  Wait...");
-      fflush (stderr);
     }
   else
     /* "less -c /usr/man/foo.1"
